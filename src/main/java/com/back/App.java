@@ -24,7 +24,7 @@ public class App {
             } else if (command.equals("목록")) {
                 actionList();
 
-            } else if (command.startsWith("삭제")) {
+            } else if (command.startsWith("삭제")) { //삭제로 시작하는
                 actionDelete(command);
 
             } else if (command.equals("종료")) {
@@ -100,18 +100,28 @@ public class App {
         String idStr = commandBits[1];
         int id = Integer.parseInt(idStr); //문자열 -> 숫자
 
-        delete(id);
-        System.out.println("%d번 명언이 삭제되었습니다.".formatted(id));
+        boolean result = delete(id);
+        if(result) {
+            System.out.println("%d번 명언이 삭제되었습니다.".formatted(id));
+        }
+        else {
+            System.out.println("%d번 명언은 존재하지 않습니다.".formatted(id));
+        }
     }
 
     //삭제 (데이터 처리)
-    public void delete(int id) {
+    public boolean delete(int id) {
         int deleteTargetIndex = -1; // 삭제하고 싶은 명언이 저장된 위치
 
         for(int i = 0; i < lastIndex; i++) {
             if(wiseSayings[i].id == id) {
                 deleteTargetIndex = i;
+                break;  //원하는 결과 도출까지만 반복
             }
+        }
+
+        if(deleteTargetIndex == -1) {
+            return false; //종료
         }
 
         for(int i = deleteTargetIndex; i < lastIndex; i++) {
@@ -119,5 +129,6 @@ public class App {
         }
 
         lastIndex--;
+        return true;
     }
 }
