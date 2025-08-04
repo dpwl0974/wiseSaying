@@ -24,8 +24,8 @@ public class App {
             } else if (command.equals("목록")) {
                 actionList();
 
-            } else if (command.equals("삭제?id=1")) {
-                actionDelete();
+            } else if (command.startsWith("삭제")) {
+                actionDelete(command);
 
             } else if (command.equals("종료")) {
                 break;
@@ -33,28 +33,6 @@ public class App {
         }
     }
 
-    //삭제
-    public void actionDelete() {
-        delete();
-        System.out.println("1번 명언이 삭제되었습니다.");
-    }
-
-    //삭제 (데이터 처리)
-    public void delete() {
-        int deleteTargetIndex = -1; // 삭제하고 싶은 명언이 저장된 위치
-
-        for(int i = 0; i < lastIndex; i++) {
-            if(wiseSayings[i].id == 1) {
-                deleteTargetIndex = i;
-            }
-        }
-
-        for(int i = deleteTargetIndex; i < lastIndex; i++) {
-            wiseSayings[i] = wiseSayings[i + 1];
-        }
-
-        lastIndex--;
-    }
 
     //등록 (사용자와 상호작용 담당)
     public void actionWrite() {
@@ -107,5 +85,39 @@ public class App {
             resultListIndex++;
         }
         return resultList;
+    }
+
+    //삭제
+    public void actionDelete(String command) {
+
+        String[] commandBits = command.split("=");
+
+        if(commandBits.length < 2) {
+            System.out.println("번호를 입력해주세요. ");
+            return; //종료
+        }
+
+        String idStr = commandBits[1];
+        int id = Integer.parseInt(idStr); //문자열 -> 숫자
+
+        delete(id);
+        System.out.println("%d번 명언이 삭제되었습니다.".formatted(id));
+    }
+
+    //삭제 (데이터 처리)
+    public void delete(int id) {
+        int deleteTargetIndex = -1; // 삭제하고 싶은 명언이 저장된 위치
+
+        for(int i = 0; i < lastIndex; i++) {
+            if(wiseSayings[i].id == id) {
+                deleteTargetIndex = i;
+            }
+        }
+
+        for(int i = deleteTargetIndex; i < lastIndex; i++) {
+            wiseSayings[i] = wiseSayings[i + 1];
+        }
+
+        lastIndex--;
     }
 }
