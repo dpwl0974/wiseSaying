@@ -21,23 +21,24 @@ public class App {
             System.out.print("명령) ");
             String command = sc.nextLine();
 
-            if (command.equals("등록")) {
+            Rq rq = new Rq(command);
+            String actionName = rq.getActionName();
+
+            if (actionName.equals("등록")) {
                 actionWrite();
 
-            } else if (command.equals("목록")) {
+            } else if (actionName.equals("목록")) {
                 actionList();
 
-            } else if (command.startsWith("삭제")) { //삭제로 시작하는
+            } else if (actionName.startsWith("삭제")) { //삭제로 시작하는
                 //actionDelete(command);
-                setParams(command);
-                actionDelete();
+                actionDelete(rq);
 
-            } else if (command.startsWith("수정")) {
+            } else if (actionName.startsWith("수정")) {
                 //actionModify(command);
-                setParams(command);
-                actionModify();
+                actionModify(rq);
 
-            } else if (command.equals("종료")) {
+            } else if (actionName.equals("종료")) {
                 break;
             }
         }
@@ -99,7 +100,7 @@ public class App {
 
 
     //삭제
-    private void actionDelete() {
+    private void actionDelete(Rq rq) {
         /*String[] commandBits = command.split("=");
 
         if (commandBits.length < 2) {
@@ -111,7 +112,7 @@ public class App {
         String idStr = commandBits[1];*/
 
         //getParam 사용
-        String idStr = getParam("id");
+        String idStr = rq.getParam("id");
         int id = Integer.parseInt(idStr); //문자열 -> 숫자
 
         boolean result = delete(id);
@@ -138,7 +139,7 @@ public class App {
     }
 
     //수정
-    private void actionModify() {
+    private void actionModify(Rq rq) {
         /*String[] commandBits = command.split("="); // '=' 기준 분할
 
         if (commandBits.length < 2) {
@@ -154,7 +155,7 @@ public class App {
         //int modifyTargetIndex = findIndexById(id); //좀 더 효율적으로 바꾸기
 
         //getParam 사용하면 됨
-        String strId = getParam("id");
+        String strId = rq.getParam("id");
         int id = Integer.parseInt(strId);
         WiseSaying wiseSaying = finByIdOrNull(id);
 
