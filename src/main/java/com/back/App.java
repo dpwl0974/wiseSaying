@@ -5,14 +5,15 @@ import java.util.Scanner;
 //핵심 로직 클래스
 public class App {
     // ✅ run() 및 다른 함수 사용위해 인스턴스 변수로 변경 (지역 변수 X)
-    Scanner sc = new Scanner(System.in);
-    int lastNo = 0; //등록 번호
-    int lastIndex = 0; //배열 인덱스
-    WiseSaying[] wiseSayings = new WiseSaying[100]; //크기 100 배열
+    private Scanner sc = new Scanner(System.in);
+    private int lastNo = 0; //등록 번호
+    private int lastIndex = 0; //배열 인덱스
+    private WiseSaying[] wiseSayings = new WiseSaying[100]; //크기 100 배열
 
     //배열의 단점을 보완하기 위한 ArrayList 추가 예정
 
 
+    //외부에서 꼭 써야하는 메소드 => public 그 외 기본 private
     public void run() {  //main 무조건 static ⭕️ 그 외 static ❌
         System.out.println("== 명언 앱 ==");
 
@@ -40,7 +41,7 @@ public class App {
 
 
     //등록 (사용자와 상호작용 담당)
-    public void actionWrite() {
+    private void actionWrite() {
         System.out.print("명언 : ");
         String saying = sc.nextLine();
         System.out.print("작가 : ");
@@ -52,7 +53,7 @@ public class App {
     }
 
     //등록 (데이터 처리 담당)
-    public WiseSaying write(String saying, String author) {
+    private WiseSaying write(String saying, String author) {
         lastNo++;
 
         WiseSaying wiseSaying = new WiseSaying(lastNo, saying, author); //인스턴스 생성
@@ -63,7 +64,7 @@ public class App {
     }
 
     //목록
-    public void actionList() {
+    private void actionList() {
         System.out.println("번호 / 작가 / 명언");
         System.out.println("----------------------");
 
@@ -76,7 +77,7 @@ public class App {
     }
 
     //목록 (데이터 처리)
-    public WiseSaying[] findListDesc() {
+    private WiseSaying[] findListDesc() {
         //내림차순으로 저장할 배열
         WiseSaying[] resultList = new WiseSaying[lastIndex];
         int resultListIndex = 0;
@@ -91,7 +92,7 @@ public class App {
 
 
     //삭제
-    public void actionDelete(String command) {
+    private void actionDelete(String command) {
 
         String[] commandBits = command.split("=");
 
@@ -114,7 +115,7 @@ public class App {
 
 
     //삭제 (데이터 처리)
-    public boolean delete(int id) {
+    private boolean delete(int id) {
         int deleteTargetIndex = findIndexById(id); // 삭제하고 싶은 명언이 저장된 위치
 
 
@@ -131,7 +132,7 @@ public class App {
     }
 
     //수정
-    public void actionModify(String command) {
+    private void actionModify(String command) {
         String[] commandBits = command.split("="); // '=' 기준 분할
 
         if(commandBits.length < 2) {
@@ -162,14 +163,14 @@ public class App {
     }
 
     //수정 (데이터 처리)
-    public void modify(WiseSaying modifyTargetWiseSaying, String newSaying, String newAuthor) {
+    private void modify(WiseSaying modifyTargetWiseSaying, String newSaying, String newAuthor) {
         modifyTargetWiseSaying.setSaying(newSaying);
         modifyTargetWiseSaying.setAuthor(newAuthor);
     }
 
 
     //id 찾기 (삭제, 수정)
-    public int findIndexById(int id) {
+    private int findIndexById(int id) {
         for (int i = 0; i < lastIndex; i++) {
             if (wiseSayings[i].getId() == id) {
                 return i; //명언 번호 반환
