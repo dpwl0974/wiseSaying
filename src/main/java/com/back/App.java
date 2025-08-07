@@ -1,9 +1,6 @@
 package com.back;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
-import java.util.stream.IntStream;
+import java.util.*;
 
 //핵심 로직 클래스
 public class App {
@@ -14,7 +11,7 @@ public class App {
     //private WiseSaying[] wiseSayings = new WiseSaying[100]; //크기 100 배열
     //배열의 단점을 보완하기 위한 ArrayList 추가 / List 안에 ArrayList, LinkedList 등 포함
     private List<WiseSaying> wiseSayings = new ArrayList<>(); //자동 형변환
-
+    Map<String, String> paramMap = new HashMap<>(); //검색 파라미터 맵
 
     //외부에서 꼭 써야하는 메서드 => public 그 외 기본 private
     public void run() {  //main 무조건 static ⭕️ 그 외 static ❌
@@ -31,10 +28,14 @@ public class App {
                 actionList();
 
             } else if (command.startsWith("삭제")) { //삭제로 시작하는
-                actionDelete(command);
+                //actionDelete(command);
+                setParams(command);
+                actionDelete();
 
             } else if (command.startsWith("수정")) {
-                actionModify(command);
+                //actionModify(command);
+                setParams(command);
+                actionModify();
 
             } else if (command.equals("종료")) {
                 break;
@@ -74,6 +75,7 @@ public class App {
 
         List<WiseSaying> wiseSayings = findListDesc();
 
+        //stream 사용 가능하지만 통일성을 위해 굳이 안고쳐도 되면 하지 ❌
         for (WiseSaying wiseSaying : wiseSayings) { //배열 훑기
             // 변수 사용 시 코드 길어짐 -> 포맷팅 효율적
             System.out.println("%d / %s / %s".formatted(wiseSaying.getId(), wiseSaying.getSaying(), wiseSaying.getAuthor()));
@@ -97,16 +99,19 @@ public class App {
 
 
     //삭제
-    private void actionDelete(String command) {
-
-        String[] commandBits = command.split("=");
+    private void actionDelete() {
+        /*String[] commandBits = command.split("=");
 
         if (commandBits.length < 2) {
             System.out.println("번호를 입력해주세요. ");
             return; //종료
         }
 
-        String idStr = commandBits[1];
+
+        String idStr = commandBits[1];*/
+
+        //getParam 사용
+        String idStr = getParam("id");
         int id = Integer.parseInt(idStr); //문자열 -> 숫자
 
         boolean result = delete(id);
@@ -133,8 +138,8 @@ public class App {
     }
 
     //수정
-    private void actionModify(String command) {
-        String[] commandBits = command.split("="); // '=' 기준 분할
+    private void actionModify() {
+        /*String[] commandBits = command.split("="); // '=' 기준 분할
 
         if (commandBits.length < 2) {
             System.out.println("번호를 입력해주세요. ");
@@ -142,47 +147,97 @@ public class App {
         }
 
         String idStr = commandBits[1];
-        int id = Integer.parseInt(idStr); //문자열 -> 숫자
+        int id = Integer.parseInt(idStr); //문자열 -> 숫자*/
 
-        int modifyTargetIndex = findIndexById(id);
+        //String keyword = getParma("keyword")
+
+        //int modifyTargetIndex = findIndexById(id); //좀 더 효율적으로 바꾸기
+
+        //getParam 사용하면 됨
+        String strId = getParam("id");
+        int id = Integer.parseInt(strId);
+        WiseSaying wiseSaying = finByIdOrNull(id);
 
 
-        if (modifyTargetIndex == -1) {
+        if (wiseSayings == null) {
             System.out.println("%d번 명언은 존재하지 않습니다.".formatted(id));
             return;
         }
 
-        WiseSaying modifyTargetWiseSaying = wiseSayings.get(modifyTargetIndex);
+        //WiseSaying modifyTargetWiseSaying = wiseSayings.get(modifyTargetIndex);
 
-        System.out.println("명언(기존) : %s".formatted(modifyTargetWiseSaying.getSaying()));
+        System.out.println("명언(기존) : %s".formatted(wiseSaying.getSaying()));
         System.out.print("명언 : ");
         String newSaying = sc.nextLine();
-        System.out.println("작가(기존) : %s".formatted(modifyTargetWiseSaying.getAuthor()));
+        System.out.println("작가(기존) : %s".formatted(wiseSaying.getAuthor()));
         System.out.print("작가 : ");
         String newAuthor = sc.nextLine();
 
-        modify(modifyTargetWiseSaying, newSaying, newAuthor); //새 명언, 작가 전달
+        modify(wiseSaying, newSaying, newAuthor); //새 명언, 작가 전달
     }
 
     //수정 (데이터 처리)
-    private void modify(WiseSaying modifyTargetWiseSaying, String newSaying, String newAuthor) {
-        modifyTargetWiseSaying.setSaying(newSaying);
-        modifyTargetWiseSaying.setAuthor(newAuthor);
+    private void modify(WiseSaying wiseSaying, String newSaying, String newAuthor) {
+        wiseSaying.setSaying(newSaying);
+        wiseSaying.setAuthor(newAuthor);
     }
 
 
-    //id 찾기 (삭제, 수정)
+    /*//id 찾기 (삭제, 수정)
     private int findIndexById(int id) {
         return IntStream.range(0, wiseSayings.size())
                 .filter(i -> wiseSayings.get(i).getId() == id) //if문
                 .findFirst()
                 .orElse(-1); //없으면 return -1 해주는 것 반영
 
-        /*for (int i = 0; i < wiseSayings.size(); i++) {
+        *//*for (int i = 0; i < wiseSayings.size(); i++) {
             if (wiseSayings.get(i).getId() == id) {
                 return i;
             }
-        }*/
+        }*//*
+    }*/
+
+    // findIndexById 보완 - id 찾아서 객체 반환 (Null이 넘어올 수 있음)
+    private WiseSaying finByIdOrNull(int id) {
+        return wiseSayings.stream()
+                .filter(w -> w.getId() == id)
+                .findFirst()
+                .orElse(null);
+    }
+
+    //파라미터를 통해 id 찾기 - key 넘기면 key에 맞는 value 넘김
+    private String getParam(String key) {
+        return paramMap.get(key);
+    }
+
+
+    private void setParams(String command) {
+        String[] commandBits = command.split("\\?");
+
+        String actionName = commandBits[0];
+        String queryString = "";
+
+        if (commandBits.length > 1) {
+            queryString = commandBits[1];
+        }
+
+        String[] queryStringBits = queryString.split("&");
+
+        for (String param : queryStringBits) {
+            String[] paramBits = param.split("=");
+            String key = paramBits[0];
+            String value = null;
+
+            if (paramBits.length > 1) {
+                value = paramBits[1];
+            }
+
+            if (value == null) {
+                continue;
+            }
+
+            paramMap.put(key, value);
+        }
     }
 }
 
