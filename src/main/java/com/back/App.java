@@ -112,6 +112,7 @@ public class App {
         String idStr = commandBits[1];*/
 
         //getParam 사용 -> rq클래스 활용
+        //함수마다 defaultValue 따로 사용
         int id = rq.getParamAsInt("id", -1);
 
         boolean result = delete(id);
