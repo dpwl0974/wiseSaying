@@ -3,6 +3,7 @@ package com.back;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.stream.IntStream;
 
 //핵심 로직 클래스
 public class App {
@@ -177,12 +178,16 @@ public class App {
 
     //id 찾기 (삭제, 수정)
     private int findIndexById(int id) {
-        for (int i = 0; i < wiseSayings.size(); i++) {
+        return IntStream.range(0, wiseSayings.size())
+                .filter(i -> wiseSayings.get(i).getId() == id) //if문
+                .findFirst()
+                .orElse(-1); //없으면 return -1 해주는 것 반영
+
+        /*for (int i = 0; i < wiseSayings.size(); i++) {
             if (wiseSayings.get(i).getId() == id) {
                 return i;
             }
-        }
-        return -1;
+        }*/
     }
 }
 
