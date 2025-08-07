@@ -111,9 +111,8 @@ public class App {
 
         String idStr = commandBits[1];*/
 
-        //getParam 사용
-        String idStr = rq.getParam("id");
-        int id = Integer.parseInt(idStr); //문자열 -> 숫자
+        //getParam 사용 -> rq클래스 활용
+        int id = rq.getParamAsInt("id", -1);
 
         boolean result = delete(id);
         if (result) {
@@ -155,9 +154,9 @@ public class App {
         //int modifyTargetIndex = findIndexById(id); //좀 더 효율적으로 바꾸기
 
         //getParam 사용하면 됨
-        String strId = rq.getParam("id");
-        int id = Integer.parseInt(strId);
+        int id = rq.getParamAsInt("id", -1);
         WiseSaying wiseSaying = finByIdOrNull(id);
+
 
 
         if (wiseSayings == null) {
