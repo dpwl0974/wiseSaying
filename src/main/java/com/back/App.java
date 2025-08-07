@@ -10,6 +10,8 @@ public class App {
     int lastIndex = 0; //배열 인덱스
     WiseSaying[] wiseSayings = new WiseSaying[100]; //크기 100 배열
 
+    //배열의 단점을 보완하기 위한 ArrayList 추가 예정
+
 
     public void run() {  //main 무조건 static ⭕️ 그 외 static ❌
         System.out.println("== 명언 앱 ==");
@@ -46,17 +48,14 @@ public class App {
 
         WiseSaying wiseSaying = write(saying, author); //지역변수 접근위해 파라미터 전달
 
-        System.out.println("%d번 명언이 등록되었습니다.".formatted(wiseSaying.id)); //return 받은 값 사용
+        System.out.println("%d번 명언이 등록되었습니다.".formatted(wiseSaying.getId())); //return 받은 값 사용
     }
 
     //등록 (데이터 처리 담당)
     public WiseSaying write(String saying, String author) {
         lastNo++;
 
-        WiseSaying wiseSaying = new WiseSaying(); //인스턴스 생성
-        wiseSaying.id = lastNo;
-        wiseSaying.saying = saying;
-        wiseSaying.author = author;
+        WiseSaying wiseSaying = new WiseSaying(lastNo, saying, author); //인스턴스 생성
 
         wiseSayings[lastIndex++] = wiseSaying;
 
@@ -72,7 +71,7 @@ public class App {
 
         for(WiseSaying wiseSaying : wiseSayings) { //배열 훑기
             // 변수 사용 시 코드 길어짐 -> 포맷팅 효율적
-            System.out.println("%d / %s / %s".formatted(wiseSaying.id, wiseSaying.saying, wiseSaying.author));
+            System.out.println("%d / %s / %s".formatted(wiseSaying.getId(), wiseSaying.getSaying(), wiseSaying.getAuthor()));
         }
     }
 
@@ -152,27 +151,28 @@ public class App {
 
         WiseSaying modifyTargetWiseSaying = wiseSayings[modifyTargetIndex];
 
-        System.out.println("명언(기존) : %s".formatted(modifyTargetWiseSaying.saying));
+        System.out.println("명언(기존) : %s".formatted(modifyTargetWiseSaying.getSaying()));
         System.out.print("명언 : ");
         String newSaying = sc.nextLine();
-        System.out.println("작가(기존) : %s".formatted(modifyTargetWiseSaying.author));
+        System.out.println("작가(기존) : %s".formatted(modifyTargetWiseSaying.getAuthor()));
         System.out.print("작가 : ");
         String newAuthor = sc.nextLine();
 
-        modify(modifyTargetWiseSaying, newSaying, newAuthor);
+        modify(modifyTargetWiseSaying, newSaying, newAuthor); //새 명언, 작가 전달
     }
 
     //수정 (데이터 처리)
     public void modify(WiseSaying modifyTargetWiseSaying, String newSaying, String newAuthor) {
-        modifyTargetWiseSaying.saying = newSaying;
-        modifyTargetWiseSaying.author = newAuthor;
+        modifyTargetWiseSaying.setSaying(newSaying);
+        modifyTargetWiseSaying.setAuthor(newAuthor);
     }
+
 
     //id 찾기 (삭제, 수정)
     public int findIndexById(int id) {
         for (int i = 0; i < lastIndex; i++) {
-            if (wiseSayings[i].id == id) {
-                return i;
+            if (wiseSayings[i].getId() == id) {
+                return i; //명언 번호 반환
             }
         }
         return -1;
