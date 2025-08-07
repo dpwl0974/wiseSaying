@@ -120,21 +120,16 @@ public class App {
 
     //삭제 (데이터 처리)
     private boolean delete(int id) {
-        int deleteTargetIndex = findIndexById(id); // 삭제하고 싶은 명언이 저장된 위치
-
-
-        if (deleteTargetIndex == -1) {
-            return false; //종료
-        }
+        //int deleteTargetIndex = findIndexById(id); // 삭제하고 싶은 명언이 저장된 위치
 
         //ArrayList에는 "삭제" 존재하므로 필요 없는 코드
         /*for(int i = deleteTargetIndex; i < lastIndex; i++)
             wiseSayings[i] = wiseSayings[i + 1];
         }*/
 
-        wiseSayings.remove(deleteTargetIndex);
-
-        return true;
+        // for문으로 break 찾아서 삭제하는 방법이 성능 ⬆️
+        // removeIf는 가독성 ⬆️
+        return wiseSayings.removeIf(w -> w.getId() == id); //if문 대체
     }
 
     //수정
