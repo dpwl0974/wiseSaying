@@ -39,7 +39,8 @@ public class Rq {
     }
 
     //함수마다 defaultValue 따로 사용 => 효율적
-    public String getParam(String key, String defaultValue) {
+    //파라미터를 통해 id 찾기 - key 넘기면 key에 맞는 value 넘김
+    String getParam(String key, String defaultValue) {
         return paramMap.getOrDefault(key, defaultValue);
     }
 
