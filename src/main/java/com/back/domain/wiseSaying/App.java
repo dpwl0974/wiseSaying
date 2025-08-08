@@ -1,4 +1,6 @@
-package com.back;
+package com.back.domain.wiseSaying;
+
+import com.back.domain.wiseSaying.controller.SystemController;
 
 import java.util.*;
 
@@ -7,11 +9,12 @@ public class App {
     // ✅ run() 및 다른 함수 사용위해 인스턴스 변수로 변경 (지역 변수 X)
     private Scanner sc = new Scanner(System.in);
     private int lastId = 0; //등록 번호
-    //private int lastIndex = 0; //배열 인덱스 / ArrayList에는 필요없는 부분
-    //private WiseSaying[] wiseSayings = new WiseSaying[100]; //크기 100 배열
+
     //배열의 단점을 보완하기 위한 ArrayList 추가 / List 안에 ArrayList, LinkedList 등 포함
     private List<WiseSaying> wiseSayings = new ArrayList<>(); //자동 형변환
     Map<String, String> paramMap = new HashMap<>(); //검색 파라미터 맵
+
+    private SystemController systemController = new SystemController();
 
     //외부에서 꼭 써야하는 메서드 => public 그 외 기본 private
     public void run() {  //main 무조건 static ⭕️ 그 외 static ❌
@@ -39,6 +42,11 @@ public class App {
                 actionModify(rq);
 
             } else if (actionName.equals("종료")) {
+                systemController.exit();
+                // 종료 시 설정 저장
+                // 종료 시 데이터 백업
+                // 종료 시 자원 해제..
+
                 break;
             }
         }
@@ -126,13 +134,6 @@ public class App {
 
     //삭제 (데이터 처리)
     private boolean delete(int id) {
-        //int deleteTargetIndex = findIndexById(id); // 삭제하고 싶은 명언이 저장된 위치
-
-        //ArrayList에는 "삭제" 존재하므로 필요 없는 코드
-        /*for(int i = deleteTargetIndex; i < lastIndex; i++)
-            wiseSayings[i] = wiseSayings[i + 1];
-        }*/
-
         // for문으로 break 찾아서 삭제하는 방법이 성능 ⬆️
         // removeIf는 가독성 ⬆️
         return wiseSayings.removeIf(w -> w.getId() == id); //if문 대체
@@ -140,20 +141,6 @@ public class App {
 
     //수정
     private void actionModify(Rq rq) {
-        /*String[] commandBits = command.split("="); // '=' 기준 분할
-
-        if (commandBits.length < 2) {
-            System.out.println("번호를 입력해주세요. ");
-            return; //종료
-        }
-
-        String idStr = commandBits[1];
-        int id = Integer.parseInt(idStr); //문자열 -> 숫자*/
-
-        //String keyword = getParma("keyword")
-
-        //int modifyTargetIndex = findIndexById(id); //좀 더 효율적으로 바꾸기
-
         //getParam 사용하면 됨
         int id = rq.getParamAsInt("id", -1);
         WiseSaying wiseSaying = finByIdOrNull(id);
@@ -165,7 +152,6 @@ public class App {
             return;
         }
 
-        //WiseSaying modifyTargetWiseSaying = wiseSayings.get(modifyTargetIndex);
 
         System.out.println("명언(기존) : %s".formatted(wiseSaying.getSaying()));
         System.out.print("명언 : ");
@@ -183,20 +169,6 @@ public class App {
         wiseSaying.setAuthor(newAuthor);
     }
 
-
-    /*//id 찾기 (삭제, 수정)
-    private int findIndexById(int id) {
-        return IntStream.range(0, wiseSayings.size())
-                .filter(i -> wiseSayings.get(i).getId() == id) //if문
-                .findFirst()
-                .orElse(-1); //없으면 return -1 해주는 것 반영
-
-        *//*for (int i = 0; i < wiseSayings.size(); i++) {
-            if (wiseSayings.get(i).getId() == id) {
-                return i;
-            }
-        }*//*
-    }*/
 
     // findIndexById 보완 - id 찾아서 객체 반환 (Null이 넘어올 수 있음)
     private WiseSaying finByIdOrNull(int id) {

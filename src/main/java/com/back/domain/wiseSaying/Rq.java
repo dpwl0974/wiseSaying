@@ -1,4 +1,4 @@
-package com.back;
+package com.back.domain.wiseSaying;
 
 
 import java.util.Arrays;
@@ -18,30 +18,10 @@ public class Rq {
         String[] commandBits = command.split("\\?");
 
         actionName = commandBits[0];
-        /*String queryString = "";
-
-        if (commandBits.length > 1) {
-            queryString = commandBits[1];
-        }*/
         String queryString = commandBits.length > 1 ? commandBits[1] : "";
 
         String[] queryStringBits = queryString.split("&");
 
-        /*for (String param : queryStringBits) {
-            String[] paramBits = param.split("=");
-            String key = paramBits[0];
-            String value = null;
-
-            if (paramBits.length > 1) {
-                value = paramBits[1];
-            }
-
-            if (value == null) {
-                continue;
-            }
-
-            paramMap.put(key, value);
-        }*/
 
         paramMap = Arrays.stream(queryStringBits) // key1=value1, key2=value2 ...
                 .map(part -> part.split("="))
@@ -72,4 +52,5 @@ public class Rq {
 
         return Integer.parseInt(value);
     }
+
 }
