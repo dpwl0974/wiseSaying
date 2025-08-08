@@ -1,10 +1,12 @@
 package com.back.domain.wiseSaying.controller;
 
 import com.back.domain.wiseSaying.Rq;
+import com.back.domain.wiseSaying.Ut;
 import com.back.domain.wiseSaying.WiseSaying;
 import com.back.domain.wiseSaying.service.WiseSayingService;
 
-import java.util.*;
+import java.util.List;
+import java.util.Scanner;
 
 public class WiseSayingController {
     private Scanner sc;
@@ -28,7 +30,7 @@ public class WiseSayingController {
 
     //목록
     public void actionList() {
-        System.out.println("번호 / 작가 / 명언");
+        System.out.println("번호 / 작가 / 명언 / 작성날짜 / 수정날짜");
         System.out.println("----------------------");
 
         List<WiseSaying> wiseSayings = wiseSayingService.findListDesc();
@@ -37,7 +39,11 @@ public class WiseSayingController {
         for (WiseSaying wiseSaying : wiseSayings) { //배열 훑기
             // 변수 사용 시 코드 길어짐 -> 포맷팅 효율적
             System.out.println("%d / %s / %s / %s / %s".formatted(wiseSaying.getId(),
-                    wiseSaying.getSaying(), wiseSaying.getAuthor(), wiseSaying.getCreatedDate(), wiseSaying.getModifiedDate()));
+                    wiseSaying.getSaying(), wiseSaying.getAuthor(),
+                    Ut.getFormattedDate(wiseSaying.getCreatedDate()),
+                    Ut.getFormattedDate(wiseSaying.getModifiedDate())));
+
+
         }
     }
 
