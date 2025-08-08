@@ -10,7 +10,7 @@ public class App {
     // ✅ run() 및 다른 함수 사용위해 인스턴스 변수로 변경 (지역 변수 X)
     private Scanner sc = new Scanner(System.in);
 
-    //세스템 관련
+    //시스템 관련
     private SystemController systemController = new SystemController();
     //상호작용 관련
     private WiseSayingController wiseSayingController = new WiseSayingController(sc);
