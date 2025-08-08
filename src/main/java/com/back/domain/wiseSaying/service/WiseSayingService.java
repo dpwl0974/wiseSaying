@@ -6,15 +6,12 @@ import com.back.domain.wiseSaying.repository.WiseSayingRepository;
 import java.util.List;
 
 public class WiseSayingService {
-    private int lastId = 0;
     private WiseSayingRepository wiseSayingRepository = new WiseSayingRepository();
 
     //등록 (데이터 처리)
     public WiseSaying write(String saying, String author) {
-
-        lastId++;
-        WiseSaying wiseSaying = new WiseSaying(lastId, saying, author);
-        wiseSayingRepository.save(wiseSaying);
+        WiseSaying wiseSaying = new WiseSaying(0, saying, author);
+        wiseSaying = wiseSayingRepository.save(wiseSaying);
 
         return wiseSaying;
     }
@@ -28,6 +25,8 @@ public class WiseSayingService {
     public void modify(WiseSaying wiseSaying, String newSaying, String newAuthor) {
         wiseSaying.setSaying(newSaying);
         wiseSaying.setAuthor(newAuthor);
+        wiseSayingRepository.save(wiseSaying);
+    }
     }
 
     //내림차순

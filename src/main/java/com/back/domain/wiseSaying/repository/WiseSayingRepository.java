@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class WiseSayingRepository {
+    private int lastId = 0;
     private List<WiseSaying> wiseSayings = new ArrayList<>();
 
     // findIndexById 보완 - id 찾아서 객체 반환 (Null이 넘어올 수 있음)
@@ -17,8 +18,19 @@ public class WiseSayingRepository {
     }
 
     //저장
-    public void save(WiseSaying wiseSaying) {
-        wiseSayings.add(wiseSaying);
+    public WiseSaying save(WiseSaying wiseSaying) {
+
+        if(wiseSaying.isNew()) { // wiseSaying이 새로운 객체인 경우
+            lastId++;
+            wiseSaying.setId(lastId);
+            wiseSaying.setCreatedDate(java.time.LocalDateTime.now());
+            wiseSaying.setModifiedDate(java.time.LocalDateTime.now());
+            wiseSayings.add(wiseSaying);
+        }else {
+            wiseSaying.setModifiedDate(java.time.LocalDateTime.now());
+        }
+
+        return wiseSaying;
     }
 
 

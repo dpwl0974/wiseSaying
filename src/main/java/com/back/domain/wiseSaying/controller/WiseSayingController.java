@@ -26,18 +26,6 @@ public class WiseSayingController {
         System.out.println("%d번 명언이 등록되었습니다.".formatted(wiseSaying.getId())); //return 받은 값 사용
     }
 
-    //등록 (데이터 처리 담당)
-    private WiseSaying write(String saying, String author) {
-        lastId++;
-
-        WiseSaying wiseSaying = new WiseSaying(lastId, saying, author); //인스턴스 생성
-
-        wiseSayings.add(wiseSaying);
-
-
-        return wiseSaying; //actionWrite()에서 값 받기 위해 return
-    }
-
     //목록
     public void actionList() {
         System.out.println("번호 / 작가 / 명언");
@@ -48,10 +36,10 @@ public class WiseSayingController {
         //stream 사용 가능하지만 통일성을 위해 굳이 안고쳐도 되면 하지 ❌
         for (WiseSaying wiseSaying : wiseSayings) { //배열 훑기
             // 변수 사용 시 코드 길어짐 -> 포맷팅 효율적
-            System.out.println("%d / %s / %s".formatted(wiseSaying.getId(), wiseSaying.getSaying(), wiseSaying.getAuthor()));
+            System.out.println("%d / %s / %s / %s / %s".formatted(wiseSaying.getId(),
+                    wiseSaying.getSaying(), wiseSaying.getAuthor(), wiseSaying.getCreatedDate(), wiseSaying.getModifiedDate()));
         }
     }
-
 
     //삭제
     public void actionDelete(Rq rq) {
@@ -73,7 +61,7 @@ public class WiseSayingController {
         int id = rq.getParamAsInt("id", -1);
         WiseSaying wiseSaying = wiseSayingService.getByIdOrNull(id);
 
-        if (wiseSayings == null) {
+        if (wiseSaying == null) {
             System.out.println("%d번 명언은 존재하지 않습니다.".formatted(id));
             return;
         }
