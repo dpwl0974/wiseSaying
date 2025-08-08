@@ -1,12 +1,13 @@
 package com.back.domain.wiseSaying.service;
 
-import com.back.domain.wiseSaying.WiseSaying;
+import com.back.domain.wiseSaying.entity.WiseSaying;
+import com.back.domain.wiseSaying.global.AppContext;
 import com.back.domain.wiseSaying.repository.WiseSayingRepository;
 
 import java.util.List;
 
 public class WiseSayingService {
-    private WiseSayingRepository wiseSayingRepository = new WiseSayingRepository();
+    private WiseSayingRepository wiseSayingRepository = AppContext.wiseSayingRepository;
 
     public void modify(WiseSaying wiseSaying, String newSaying, String newAuthor) {
         wiseSaying.setSaying(newSaying);

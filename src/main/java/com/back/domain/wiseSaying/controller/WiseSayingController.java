@@ -1,8 +1,9 @@
 package com.back.domain.wiseSaying.controller;
 
-import com.back.domain.wiseSaying.Rq;
-import com.back.domain.wiseSaying.Ut;
-import com.back.domain.wiseSaying.WiseSaying;
+import com.back.domain.wiseSaying.entity.WiseSaying;
+import com.back.domain.wiseSaying.global.AppContext;
+import com.back.domain.wiseSaying.global.Rq;
+import com.back.domain.wiseSaying.global.Ut;
 import com.back.domain.wiseSaying.service.WiseSayingService;
 
 import java.util.List;
@@ -10,7 +11,7 @@ import java.util.Scanner;
 
 public class WiseSayingController {
     private Scanner sc;
-    WiseSayingService wiseSayingService = new WiseSayingService();
+    WiseSayingService wiseSayingService =  AppContext.wiseSayingService;
 
     public WiseSayingController(Scanner sc) {
         this.sc = sc;

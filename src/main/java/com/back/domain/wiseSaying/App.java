@@ -2,18 +2,18 @@ package com.back.domain.wiseSaying;
 
 import com.back.domain.wiseSaying.controller.SystemController;
 import com.back.domain.wiseSaying.controller.WiseSayingController;
+import com.back.domain.wiseSaying.global.AppContext;
+import com.back.domain.wiseSaying.global.Rq;
 
-import java.util.*;
+import java.util.Scanner;
 
 //핵심 로직 클래스
 public class App {
     // ✅ run() 및 다른 함수 사용위해 인스턴스 변수로 변경 (지역 변수 X)
-    private Scanner sc = new Scanner(System.in);
+    private Scanner sc = AppContext.sc;
 
-    //시스템 관련
-    private SystemController systemController = new SystemController();
-    //상호작용 관련
-    private WiseSayingController wiseSayingController = new WiseSayingController(sc);
+    private SystemController systemController = AppContext.systemController;
+    private WiseSayingController wiseSayingController = AppContext.wiseSayingController;
 
 
     //외부에서 꼭 써야하는 메서드 => public 그 외 기본 private

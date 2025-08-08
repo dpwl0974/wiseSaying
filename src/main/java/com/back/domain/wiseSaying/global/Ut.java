@@ -1,4 +1,4 @@
-package com.back.domain.wiseSaying;
+package com.back.domain.wiseSaying.global;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
